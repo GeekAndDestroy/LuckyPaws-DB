@@ -1,7 +1,8 @@
 from flask import request, render_template
 from app import app, db
 from .models import User, EmergencyContact, Veterinarian, Dog, Image
-from .auth import admin_required  # Import the admin_required decorator
+from .auth import basic_auth, token_auth
+
 
 
 # Define a route
@@ -84,7 +85,6 @@ def login():
 
 @app.route('/images', methods=['POST'])
 @token_auth.login_required
-@admin_required
 def create_image():
     data = request.json
     user = token_auth.current_user()
@@ -101,7 +101,6 @@ def get_image(image_id):
 
 @app.route('/images/<int:image_id>', methods=['DELETE'])
 @token_auth.login_required
-@admin_required
 def delete_image(image_id):
     image = db.session.execute(db.select(Image).where(Image.image_id == image_id)).scalar_one_or_none()
     if image is None:

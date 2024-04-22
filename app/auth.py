@@ -31,12 +31,3 @@ def verify(token):
 def handle_error(status_code):
     return {'error': 'Incorrect token. Please try again'}, status_code
 
-@admin_required
-def verify_admin(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not g.current_user.is_admin:
-            return {'error': 'You do not have permission to access this page'}, 403
-        return f(*args, **kwargs)
-    return decorated_function
-   

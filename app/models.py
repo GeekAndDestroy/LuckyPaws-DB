@@ -244,7 +244,7 @@ class Dog(db.Model):
         
 
 
-class Images(db.Model):
+class Image(db.Model):
     image_id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String)
     date_added = db.Column(db.DateTime(timezone=True), default=datetime.now)
