@@ -50,7 +50,7 @@ def create_user():
 
 
 
-@app.route('/users/me', method=['PUT'])
+@app.route('/users/me', methods=['PUT'])
 @token_auth.login_required
 def update_me():
     user = token_auth.current_user()
@@ -58,14 +58,14 @@ def update_me():
     user.update(**data)
     return user.to_dict() 
 
-@app.route('/users/me', method=['DELETE'])
+@app.route('/users/me', methods=['DELETE'])
 @token_auth.login_required
 def delete_me():
     user = token_auth.current_user()
     user.delete()
     return {'success': 'User has been successfully deleted'}, 200
 
-@app.route('/users/me', method=['GET'])
+@app.route('/users/me', methods=['GET'])
 @token_auth.login_required
 def get_me():
     user = token_auth.current_user()
