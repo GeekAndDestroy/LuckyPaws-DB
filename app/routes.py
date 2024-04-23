@@ -2,6 +2,7 @@ from flask import request, render_template
 from app import app, db
 from .models import User, EmergencyContact, Veterinarian, Dog, Image
 from .auth import basic_auth, token_auth
+import secrets
 
 
 
@@ -23,7 +24,7 @@ def create_user():
     data = request.json
 
     #Validate that the data has all the required fields
-    required_fields = ['firstName', 'lastName', 'username', 'email', 'password']
+    required_fields = ['firstName', 'lastName', 'email', 'password']
     missing_fields = []
     for field in required_fields:
         if field not in data:
@@ -34,17 +35,16 @@ def create_user():
     # Pull the individual data from the body
     first_name = data.get('firstName')
     last_name = data.get('lastName')
-    username = data.get('username')
     email = data.get('email')
     password = data.get('password')
 
     # Check to see if any current users already have that username and/or email
-    check_users = db.session.execute(db.select(User).where( (User.username == username) | (User.email == email) )).scalars().all()
+    check_users = db.session.execute(db.select(User).where(User.email == email)).scalars().all()
     if check_users:
         return {'error': "A user with that username and/or email already exists"}, 400 
-        
+    token = secrets.token_hex(16)   
     # Create a new instance of user with the data from the request
-    new_user = User(first_name=first_name, last_name=last_name, email=email, password=password, username=username)
+    new_user = User(first_name=first_name, last_name=last_name, email=email, password=password, token=token)
     
     return new_user.to_dict(), 201
 
@@ -74,9 +74,9 @@ def get_me():
 # Log In endpoint
 
 @app.route('/login', methods=['GET'])
-@basic_auth.verify_password
+@basic_auth.login_required
 def login():
-    user = basic_auth.user
+    user = basic_auth.current_user()
     return user.get_token()
 
 

@@ -7,7 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(25), unique=True)
     first_name = db.Column(db.String(25))
     last_name = db.Column(db.String(25))
     street1 = db.Column(db.String(50))
@@ -17,16 +16,16 @@ class User(db.Model):
     zip = db.Column(db.Integer)
     email = db.Column(db.String)
     phone_number = db.Column(db.Integer)
-    password = db.Column(db.String)
     private_notes = db.Column(db.String)
     date_created = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
-    pw_hash = db.Column(db.String)
+    password = db.Column(db.String)
     is_admin = db.Column(db.Boolean, default=False)
     token = db.Column(db.String, index=True, unique=True)
-    emergency_contacts = db.relationship('EmergencyContact', backref='user', lazy=True)
-    veterinarians = db.relationship('Veterinarian', backref='user', lazy=True)
-    dogs = db.relationship('Dog', backref='user', lazy=True)
-    images = db.relationship('Images', backref='user', lazy=True)
+    # token_expiration = db.Column(db.DateTime(timezone=True))
+    emergency_contacts = db.relationship('EmergencyContact', back_populates='user')
+    veterinarians = db.relationship('Veterinarian', back_populates='user')
+    dogs = db.relationship('Dog', back_populates='user')
+    images = db.relationship('Image', back_populates='user')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -49,7 +48,6 @@ class User(db.Model):
     def to_dict(self):
         return {
             "user_id": self.user_id,
-            "username": self.username,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "street1": self.street1,
@@ -69,8 +67,12 @@ class User(db.Model):
         }
     
     def get_token(self):
-        self.token = secrets.token_hex(16)
-        self.save()
+        # now = datetime.now(timezone.utc)
+        # if self.token and self.token_expiration > now + timedelta(minutes=1):
+        #     return {"token": self.token, "tokenExpiration": self.token_expiration}
+        # self.token = secrets.token_hex(16)
+        # self.token_expiration = now + timedelta(hours=24)
+        # self.save()
         return {"token": self.token}
     
     def delete(self):
@@ -94,6 +96,7 @@ class EmergencyContact(db.Model):
     phone_number = db.Column(db.Integer)
     email = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user = db.relationship('User', back_populates='emergency_contacts')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -125,6 +128,7 @@ class EmergencyContact(db.Model):
             "last_name": self.last_name,
             "phone_number": self.phone_number,
             "email": self.email
+            
         }
 
 
@@ -140,6 +144,7 @@ class Veterinarian(db.Model):
     email = db.Column(db.String)
     phone_number = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user = db.relationship('User', back_populates='veterinarians')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -198,6 +203,7 @@ class Dog(db.Model):
     daily_updates = db.Column(db.Boolean)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     vet_id = db.Column(db.Integer, db.ForeignKey('veterinarian.vet_id'))
+    user = db.relationship('User', back_populates='dogs')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -250,6 +256,7 @@ class Image(db.Model):
     date_added = db.Column(db.DateTime(timezone=True), default=datetime.now)
     uploaded_by_user_id = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user = db.relationship('User', back_populates='images')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
