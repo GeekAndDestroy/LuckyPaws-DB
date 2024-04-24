@@ -84,7 +84,11 @@ def get_user(user_id):
 @basic_auth.login_required
 def login():
     user = basic_auth.current_user()
-    return user.to_dict()
+    if user: 
+        return user.to_dict()
+    else:   
+        return {'error': 'User not found'}, 404
+    
 
 
 
