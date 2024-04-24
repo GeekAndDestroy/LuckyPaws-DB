@@ -60,6 +60,7 @@ class User(db.Model):
             "private_notes": self.private_notes,
             "date_created": self.date_created,
             "is_admin": self.is_admin,
+            "token": self.token,
             "emergency_contacts": [ec.to_dict() for ec in self.emergency_contacts],
             "veterinarians": [vet.to_dict() for vet in self.veterinarians],
             "dogs": [dog.to_dict() for dog in self.dogs],
