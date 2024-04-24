@@ -71,6 +71,13 @@ def get_me():
     user = token_auth.current_user()
     return user.to_dict()
 
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = db.session.execute(db.select(User).where(User.user_id == user_id)).scalar_one_or_none()
+    if user is None:
+        return {'error': 'User not found'}, 404
+    return user.to_dict()
+
 # Log In endpoint
 
 @app.route('/login', methods=['GET'])
