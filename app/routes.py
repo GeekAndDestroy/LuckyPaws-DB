@@ -84,7 +84,7 @@ def get_user(user_id):
 @basic_auth.login_required
 def login():
     user = basic_auth.current_user()
-    return user.get_token()
+    return user.to_dict()
 
 
 
