@@ -15,7 +15,7 @@ class User(db.Model):
     state = db.Column(db.String(20))
     zip = db.Column(db.Integer)
     email = db.Column(db.String)
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.BigInteger)
     private_notes = db.Column(db.String)
     date_created = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     password = db.Column(db.String)
@@ -93,7 +93,7 @@ class EmergencyContact(db.Model):
     ec_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.BigInteger)
     email = db.Column(db.String(50))
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     user = db.relationship('User', back_populates='emergency_contacts')
@@ -127,8 +127,7 @@ class EmergencyContact(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "phone_number": self.phone_number,
-            "email": self.email
-            
+            "email": self.email  
         }
 
 
@@ -142,7 +141,7 @@ class Veterinarian(db.Model):
     state = db.Column(db.String(20))
     zip = db.Column(db.Integer)
     email = db.Column(db.String)
-    phone_number = db.Column(db.Integer)
+    phone_number = db.Column(db.BigInteger)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     user = db.relationship('User', back_populates='veterinarians')
 
@@ -254,7 +253,8 @@ class Image(db.Model):
     image_id = db.Column(db.Integer, primary_key=True)
     image_url = db.Column(db.String)
     date_added = db.Column(db.DateTime(timezone=True), default=datetime.now)
-    uploaded_by_user_id = db.Column(db.Integer)
+    client_user_id = db.Column(db.Integer)
+    description = db.Column(db.String)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     user = db.relationship('User', back_populates='images')
 
@@ -285,7 +285,9 @@ class Image(db.Model):
         return {
             "image_id": self.image_id,
             "image_url": self.image_url,
-            "uploaded_by_user_id": self.uploaded_by_user_id,
+            "client_user_id": self.client_user_id,
+            "description": self.description,
+            "user_id": self.user_id,
             "date_added": self.date_added
         }
   

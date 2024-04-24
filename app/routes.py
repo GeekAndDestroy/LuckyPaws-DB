@@ -88,7 +88,7 @@ def login():
 def create_image():
     data = request.json
     user = token_auth.current_user()
-    image = Image(uploaded_by_user_id=user.user_id, **data)
+    image = Image(user_id=user.user_id, **data)
     return image.to_dict(), 201
 
 @app.route('/images/<int:image_id>', methods=['GET'])
