@@ -24,7 +24,7 @@ def create_user():
     data = request.json
 
     #Validate that the data has all the required fields
-    required_fields = ['firstName', 'lastName', 'email', 'password']
+    required_fields = ['first_name', 'last_name', 'email', 'password']
     missing_fields = []
     for field in required_fields:
         if field not in data:
@@ -33,8 +33,8 @@ def create_user():
         return {'error': f"{', '.join(missing_fields)} must be in the request body"}, 400
     
     # Pull the individual data from the body
-    first_name = data.get('firstName')
-    last_name = data.get('lastName')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
     email = data.get('email')
     password = data.get('password')
 
