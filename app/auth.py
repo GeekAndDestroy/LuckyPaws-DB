@@ -1,7 +1,6 @@
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from . import db
 from .models import User
-from datetime import datetime, timezone, timedelta
 from sqlalchemy import select
 
 
@@ -13,7 +12,7 @@ token_auth = HTTPTokenAuth()
 def verify(email, password):
     user = db.session.execute(select(User).where(User.email == email)).scalar_one_or_none()
     if user is not None and user.check_password(password):
-        return user.to_dict()
+        return user
     return None
 
 @basic_auth.error_handler
