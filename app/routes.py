@@ -125,6 +125,15 @@ def get_images():
     images = db.session.execute(db.select(Image)).scalars().all()
     return [image.to_dict() for image in images]
 
+@app.route('/images/client/<int:client_user_id>', methods=['GET'])
+@token_auth.login_required
+def get_images_by_client_id(client_user_id):
+    images = db.session.execute(db.select(Image).where(Image.client_user_id == client_user_id)).scalars().all()
+    if not images:
+        return {'error': 'No images found for the user'}, 404
+    return [image.to_dict() for image in images]
+
+
 # Emergency Contact endpoints
 
 @app.route('/emergency-contacts', methods=['POST'])
