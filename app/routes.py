@@ -143,7 +143,7 @@ def get_emergency_contact(emergency_contact_id):
         return {'error': 'Emergency contact not found'}, 404
     return emergency_contact.to_dict()
 
-@app.route('/emergency-contacts/user/<int:emergency_contact_id>', methods=['GET'])
+@app.route('/emergency-contacts/user/<int:user_id>', methods=['GET'])
 @token_auth.login_required
 def get_emergency_contact_by_user_id(user_id):
     emergency_contact = db.session.execute(db.select(EmergencyContact).where(EmergencyContact.user_id == user_id)).scalar_one_or_none()
