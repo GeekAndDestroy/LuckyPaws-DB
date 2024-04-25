@@ -284,11 +284,11 @@ def update_dog(dog_id):
 
 @app.route('/dogs/user/<int:user_id>', methods=['GET'])
 @token_auth.login_required
-def get_dog_by_user_id(user_id):
-    dog = db.session.execute(db.select(Dog).where(Dog.user_id == user_id)).scalar_one_or_none()
-    if dog is None:
-        return {'error': 'Dog not found'}, 404
-    return dog.to_dict()
+def get_dogs_by_user_id(user_id):
+    dogs = db.session.execute(db.select(Dog).where(Dog.user_id == user_id)).scalars().all()
+    if not dogs:
+        return {'error': 'No dogs found for the user'}, 404
+    return [dog.to_dict() for dog in dogs]
 
 
 
