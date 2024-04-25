@@ -181,7 +181,8 @@ class Veterinarian(db.Model):
             "state": self.state,
             "zip": self.zip,
             "email": self.email,
-            "phone_number": self.phone_number
+            "phone_number": self.phone_number,
+            "user_id": self.user_id
         }
 
 
@@ -246,7 +247,8 @@ class Dog(db.Model):
             "feeding_schedule": self.feeding_schedule,
             "potty_schedule": self.potty_schedule,
             "crated": self.crated,
-            "daily_updates": self.daily_updates
+            "daily_updates": self.daily_updates,
+            "user_id": self.user_id,
         }
         
 

@@ -230,13 +230,6 @@ def get_veterinarian_by_user_id(user_id):
         return {'error': 'Veterinarian not found'}, 404
     return veterinarian.to_dict()
 
-# @app.route('/emergency-contacts/user/<int:user_id>', methods=['GET'])
-# @token_auth.login_required
-# def get_emergency_contact_by_user_id(user_id):
-#     emergency_contact = db.session.execute(db.select(EmergencyContact).where(EmergencyContact.user_id == user_id)).scalar_one_or_none()
-#     if emergency_contact is None:
-#         return {'error': 'Emergency contact not found'}, 404
-#     return emergency_contact.to_dict()
 
 # Dog endpoints
 
