@@ -222,6 +222,22 @@ def update_veterinarian(veterinarian_id):
     veterinarian.update(**data)
     return veterinarian.to_dict()
 
+@app.route('/veterinarians/user/<int:user_id>', methods=['GET'])
+@token_auth.login_required
+def get_veterinarian_by_user_id(user_id):
+    veterinarian = db.session.execute(db.select(Veterinarian).where(Veterinarian.user_id == user_id)).scalar_one_or_none()
+    if veterinarian is None:
+        return {'error': 'Veterinarian not found'}, 404
+    return veterinarian.to_dict()
+
+# @app.route('/emergency-contacts/user/<int:user_id>', methods=['GET'])
+# @token_auth.login_required
+# def get_emergency_contact_by_user_id(user_id):
+#     emergency_contact = db.session.execute(db.select(EmergencyContact).where(EmergencyContact.user_id == user_id)).scalar_one_or_none()
+#     if emergency_contact is None:
+#         return {'error': 'Emergency contact not found'}, 404
+#     return emergency_contact.to_dict()
+
 # Dog endpoints
 
 @app.route('/dogs', methods=['POST'])
@@ -266,7 +282,13 @@ def update_dog(dog_id):
     dog.update(**data)
     return dog.to_dict()
 
-
+@app.route('/dogs/user/<int:user_id>', methods=['GET'])
+@token_auth.login_required
+def get_dog_by_user_id(user_id):
+    dog = db.session.execute(db.select(Dog).where(Dog.user_id == user_id)).scalar_one_or_none()
+    if dog is None:
+        return {'error': 'Dog not found'}, 404
+    return dog.to_dict()
 
 
 
