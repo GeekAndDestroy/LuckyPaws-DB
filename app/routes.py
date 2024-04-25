@@ -78,6 +78,11 @@ def get_user(user_id):
         return {'error': 'User not found'}, 404
     return user.to_dict()
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = db.session.execute(db.select(User)).scalars().all()
+    return [user.to_dict() for user in users]
+
 # Log In endpoint
 
 @app.route('/login', methods=['GET'])
@@ -268,7 +273,6 @@ def delete_dog(dog_id):
     return {'success': 'Dog has been successfully deleted'}, 200
 
 @app.route('/dogs', methods=['GET'])
-@token_auth.login_required
 def get_dogs():
     dogs = db.session.execute(db.select(Dog)).scalars().all()
     return [dog.to_dict() for dog in dogs]
