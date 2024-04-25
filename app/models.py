@@ -190,6 +190,7 @@ class Dog(db.Model):
     dog_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     breed = db.Column(db.Text)
+    birthday = db.Column(db.Text)
     sex = db.Column(db.Text)
     altered = db.Column(db.Boolean)
     health_conditions = db.Column(db.Text)
@@ -235,6 +236,7 @@ class Dog(db.Model):
             "dog_id": self.dog_id,
             "name": self.name,
             "breed": self.breed,
+            "birthday": self.birthday,
             "sex": self.sex,
             "altered": self.altered,
             "health_conditions": self.health_conditions,
