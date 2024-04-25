@@ -128,7 +128,8 @@ class EmergencyContact(db.Model):
             "first_name": self.first_name,
             "last_name": self.last_name,
             "phone_number": self.phone_number,
-            "email": self.email  
+            "email": self.email,
+            "user_id": self.user_id  
         }
 
 
