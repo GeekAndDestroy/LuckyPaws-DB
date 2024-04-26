@@ -125,7 +125,6 @@ def delete_image(image_id):
     return {'success': 'Image has been successfully deleted'}, 200
 
 @app.route('/images', methods=['GET'])
-@token_auth.login_required
 def get_images():
     images = db.session.execute(db.select(Image)).scalars().all()
     return [image.to_dict() for image in images]
