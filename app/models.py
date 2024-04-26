@@ -262,6 +262,7 @@ class Image(db.Model):
     client_user_id = db.Column(db.Integer)
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    dog_id = db.Column(db.Integer, db.ForeignKey('dog.dog_id'))
     user = db.relationship('User', back_populates='images')
 
     def __init__(self, **kwargs):
@@ -294,5 +295,6 @@ class Image(db.Model):
             "client_user_id": self.client_user_id,
             "description": self.description,
             "user_id": self.user_id,
+            "dog_id": self.dog_id,
             "date_added": self.date_added
         }
